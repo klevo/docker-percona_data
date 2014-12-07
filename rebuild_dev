@@ -1,0 +1,21 @@
+#!/bin/bash
+
+echo " -> Removing docker images"
+docker rm -f mysql mysql_data
+
+echo " -> Removed the mounted volumes dir on docker vm"
+boot2docker ssh "sudo rm -rf /containers"
+
+echo " -> Rebuilding the image from current directory"
+docker build -t klevo/percona_data .
+
+echo " -> Running the data container"
+docker run -v /containers/tmp/percona:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=mypass --name mysql_data klevo/percona_data
+
+echo " -> Running the db container"
+docker run -d --volumes-from mysql_data -p 3307:3306 --name mysql dockerfile/percona
+
+echo " -> Done."
+docker ps
+
+echo " -> To inspect the running db container: docker exec -i -t mysql /bin/bash"
