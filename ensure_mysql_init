@@ -14,3 +14,5 @@ else
   
   echo "MySQL data dir initialized and root password set from env var MYSQL_ROOT_PASSWORD"
 fi
+
+exit 0
