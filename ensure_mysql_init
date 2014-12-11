@@ -5,6 +5,9 @@ if [ -d /var/lib/mysql/mysql ]
 then
   echo "MySQL seems to have already been initialized"
 else
+  # If the data folder was created beforehand on the host, it will have different owner. Correct this:
+  chown mysql:mysql /var/lib/mysql
+  
   mysql_install_db
   
   mysqld_safe &
